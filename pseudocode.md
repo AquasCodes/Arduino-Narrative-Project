@@ -3,3 +3,5 @@
 WAIT for door opener to be activated  (interaction 1)  
 ACTIVATE door  
 ACTIVATE interior led  
+  
+Work
