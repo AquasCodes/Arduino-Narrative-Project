@@ -1,5 +1,5 @@
 # Pseudocode for this project
 
-- 1
-- 2
-- 3
+WAIT for door opener to be activated  (interaction 1)  
+ACTIVATE door  
+ACTIVATE interior led  
