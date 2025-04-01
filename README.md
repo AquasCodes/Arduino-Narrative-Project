@@ -1,4 +1,4 @@
-# Arduino-Narrative-Project
+# Arduino Narrative Project
 _By Daniel Portillo and Sebastian Nieto_  
 _Code and Fabrication, Spring 2025_  
 
