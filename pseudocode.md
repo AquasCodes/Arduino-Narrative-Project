@@ -5,9 +5,11 @@ ACTIVATE entrance door
 ACTIVATE interior led  
   
 WAIT for caesar killer to be activated and facing caesar(interaction 2)  
+ACTIVATE red light  
+  
 WAIT for stab button to be activated (interaction 3)  
 ACTIVATE caesar  
-FLASH red led  
+DEACTIVATE red light  
 
 WAIT for caesar killer to be turned around (interaction 4)  
 ACTIVATE exit door  
