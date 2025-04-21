@@ -1,104 +1,109 @@
 #include <Servo.h>
 
-// interactions
+// interaction pins
 int entrancePin = 2;
-int faceCaesarPin = 3;
+int approachPin = 3;
 int killPin = 4;
-int backCaesarPin = 5;
-int exitPin = 6;
+int escapePin = 5;
+int endPin = 6;
 
 // servo pins
 int door1Pin = 7;
 int caesarPin = 8;
 int door2Pin = 9;
 
+// LED pins
+int whitePin = 10;
+int redPin = 11;
+
 // servos
 Servo door1;
 Servo caesar;
 Servo door2;
 
-// LEDs
-int interiorLightPin = 10;
-int killLightPin = 11;
-
 void setup() {
-  // interactions
+  // setup interactions
   pinMode(entrancePin, INPUT);
-  pinMode(faceCaesarPin, INPUT);
+  pinMode(approachPin, INPUT);
   pinMode(killPin, INPUT);
-  pinMode(backCaesarPin, INPUT);
-  pinMode(exitPin, INPUT);
+  pinMode(escapePin, INPUT);
+  pinMode(endPin, INPUT);
 
-  // servos
+  // setup servos
   door1.attach(door1Pin);
   caesar.attach(caesarPin);
   door2.attach(door2Pin);
 
-  // LEDs
-  pinMode(interiorLightPin, OUTPUT);
-  pinMode(killLightPin, OUTPUT);
+  // setup LEDs
+  pinMode(whitePin, OUTPUT);
+  pinMode(redPin, OUTPUT);
 
   Serial.begin(9600);
 }
 
 void loop() {
-  // reset everything
-  door1.write(0);
+  // reset all servos
+  door1.write(90);
   caesar.write(0);
   door2.write(90);
-  digitalWrite(interiorLightPin, LOW);
-  digitalWrite(killLightPin, LOW);
 
-  // wait for things to settle
-  delay(2500);
+  // turn off all LEDs
+  digitalWrite(whitePin, LOW);
+  digitalWrite(redPin, LOW);
 
-  // wait for interaction 1
-  while (digitalRead(entrancePin) == LOW) {
-    delay(1);
-  }
+  // give the project a second to settle
+  delay(500);
 
-  // open door1, turn on light
-  door1.write(90);
-  digitalWrite(interiorLightPin, HIGH);
+  Serial.println("Ready!");
 
-  // wait for interaction 2
-  while (digitalRead(faceCaesarPin) == LOW) {
-    delay(1);
-  }
+  // wait for interaction 1 --------------------------------
+  interaction(1, entrancePin);
 
-  // turn on red light
-  digitalWrite(killLightPin, HIGH);
+  // open front door, turn on interior light
+  door1.write(0);
+  digitalWrite(whitePin, HIGH);
 
-  // wait for interaction 3
-  while (digitalRead(killPin) == LOW) {
-    delay(1);
-  }
+  // wait for interaction 2 --------------------------------
+  interaction(2, approachPin);
 
-  // spin caesar
+  // turn on evil kill light
+  digitalWrite(redPin, HIGH);
+
+  // wait for interaction 3 --------------------------------
+  interaction(3, killPin);
+
+  // kill caesar
   caesar.write(180);
 
-  // flash red led dramatically
-  digitalWrite(killLightPin, LOW);
-  delay(50);
-  digitalWrite(killLightPin, HIGH);
-  delay(100);
-  digitalWrite(killLightPin, LOW);
+  // wait for interaction 4 --------------------------------
+  interaction(4, escapePin);
 
-  // wait for interaction 4
-  while (digitalRead(backCaesarPin) == LOW) {
-    delay(1);
-  }
+  // open exit door
+  door2.write(180);
 
-  // open door2
-  door2.write(0)
+  // wait for interaction 5 --------------------------------
+  interaction(5, endPin);
 
-  // wait for interaction 5
-  while (digitalRead(exitPin) == LOW) {
-    delay(1);
-  }
+  Serial.println("Resetting...");
 
-  // close both doors, turn off light
-  door1.write(0);
+  // reset all servos (except caesar)
+  door1.write(90);
   door2.write(90);
-  digitalWrite(interiorLightPin, LOW);
+
+  // turn off all LEDs
+  digitalWrite(whitePin, LOW);
+  digitalWrite(redPin, LOW);
+
+  // let things sit for a bit until restarting
+  delay(5000);
+}
+
+// waits until an interaction is pressed and logs it
+void interaction(int num, int pin) {
+  while (digitalRead(pin) == LOW) {
+    delay(10);
+  }  
+  String prnt = "Interaction ";
+  prnt += num;
+  Serial.println(prnt);
 }
