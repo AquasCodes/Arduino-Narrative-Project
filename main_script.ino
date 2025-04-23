@@ -10,15 +10,17 @@ int endPin = 6;
 // servo pins
 int door1Pin = 7;
 int caesarPin = 8;
-int door2Pin = 9;
+int senatorsPin = 9;
+int door2Pin = 10;
 
 // LED pins
-int whitePin = 10;
-int redPin = 11;
+int whitePin = 11;
+int redPin = 12;
 
 // servos
 Servo door1;
 Servo caesar;
+Servo senators;
 Servo door2;
 
 void setup() {
@@ -32,6 +34,7 @@ void setup() {
   // setup servos
   door1.attach(door1Pin);
   caesar.attach(caesarPin);
+  senators.attach(senatorsPin);
   door2.attach(door2Pin);
 
   // setup LEDs
@@ -46,6 +49,7 @@ void loop() {
   door1.write(90);
   caesar.write(0);
   door2.write(90);
+  senators.write(0);
 
   // turn off all LEDs
   digitalWrite(whitePin, LOW);
@@ -74,6 +78,10 @@ void loop() {
 
   // kill caesar
   caesar.write(180);
+  digitalWrite(redPin, LOW);
+
+  // senators suprised
+  senators.write(180);
 
   // wait for interaction 4 --------------------------------
   interaction(4, escapePin);
